@@ -9,6 +9,7 @@
 #include "../include/imgui/imgui.h"
 #include "../include/imgui/imgui_impl_glfw.h"
 #include "../include/imgui/imgui_impl_opengl3.h"
+#include "../include/shaders.h"
 
 using namespace std;
 
@@ -17,38 +18,6 @@ using namespace std;
 
 float waveSpeed = 1.0f;
 float waveHeight = 0.5f;
-
-struct shaderProgram {
-  string vertexShader;
-  string fragmentShader;
-};
-
-static shaderProgram parseShader(const string& filePath) {
-  ifstream stream(filePath);
-
-  enum class ShaderType {
-    NONE = -1, VERTEX = 0, FRAGMENT = 1
-  };
-
-  string line;
-  stringstream ss[2];
-  ShaderType type = ShaderType::NONE;
-
-  while (getline(stream, line))
-    {
-      if (line.find("#shader") != string::npos)
-	{
-	  if (line.find("vertex") != string::npos)
-	    type = ShaderType::VERTEX;
-	  else if (line.find("fragment") != string::npos)
-	    type = ShaderType::FRAGMENT;
-	}
-      else
-	ss[(int)type] << line << '\n';
-      
-    }
-  return {ss[0].str(), ss[1].str()}; 
-}
 
 void processInput(GLFWwindow* window)
 {

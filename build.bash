@@ -1,6 +1,7 @@
 #!/bin/bash
 
 g++ src/main.cpp \
+    src/shaders.cpp \
     src/imgui/imgui.cpp \
     src/imgui/imgui_demo.cpp \
     src/imgui/imgui_draw.cpp \
