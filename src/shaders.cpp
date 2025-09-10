@@ -72,3 +72,24 @@ unsigned int createShader(const string& vertexShader, const string& fragmentShad
     
     return program;
 }
+
+void createFullScreen()
+{
+  GLfloat vertices[] = {
+    -1.0f, -1.0f,
+    +1.0f, -1.0f,
+    -1.0f, +1.0f,
+    +1.0f, +1.0f
+  };
+
+  GLuint VBO, VAO;
+  glGenVertexArrays(1, &VAO);
+  glGenBuffers(1, &VBO);
+
+  glBindVertexArray(VAO);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+}

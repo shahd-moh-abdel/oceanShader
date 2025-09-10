@@ -58,7 +58,7 @@ void initImGui(GLFWwindow* window)
   ImGui::CreateContext();
   ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-  ImGui::StyleColorsLight();
+  ImGui::StyleColorsClassic();
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 330");
@@ -90,15 +90,23 @@ int main()
 {
   GLFWwindow* window = initWindow();
   initImGui(window);
+
+  createFullScreen();
   
   shaderProgram source = parseShader("./shaders/ocean.glsl");
-
-  cout << "Vertex: " << source.vertexShader << '\n' << "Fragment: " << source.fragmentShader << endl;
+  unsigned int shader = createShader(source.vertexShader, source.fragmentShader);
+  glUseProgram(shader);
 
   while (!glfwWindowShouldClose(window))
     {
       processInput(window);
+
+      glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+      glClear(GL_COLOR_BUFFER_BIT);
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
       renderImGui();
+      
       glfwSwapBuffers(window);
       glfwPollEvents();
     }
