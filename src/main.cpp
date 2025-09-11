@@ -5,7 +5,6 @@
 #include <sstream>
 #include <string>
 
-
 #include "../include/imgui/imgui.h"
 #include "../include/imgui/imgui_impl_glfw.h"
 #include "../include/imgui/imgui_impl_opengl3.h"
@@ -18,7 +17,7 @@ using namespace std;
 
 float waveSpeed = 1.0f;
 float waveHeight = 0.5f;
-
+float skyColor[3] = {0.7, 0.7, 0.7};
 void processInput(GLFWwindow* window)
 {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -65,14 +64,26 @@ void initImGui(GLFWwindow* window)
 
 }
 
-void renderImGui()
+void renderImGui(unsigned int shader)
 {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
   ImGui::Begin("Controls");
-  ImGui::Text("this is a text");
+
+  if (ImGui::ColorEdit3("Sky color", skyColor))
+    {
+      int colorLoc = glGetUniformLocation(shader, "u_color");
+      if (colorLoc != -1)
+	glUniform3f(colorLoc, skyColor[0], skyColor[1], skyColor[2]);
+    }
+  
+  ImGui::Text("Wave Speed: %.2f", waveSpeed);
+  ImGui::SliderFloat("Speed", &waveSpeed, 0.0f, 5.0f);
+  
+  ImGui::Text("Wave Height: %.2f", waveHeight);
+  ImGui::SliderFloat("Height", &waveHeight, 0.0f, 2.0f);
   ImGui::End();
 
   ImGui::Render();
@@ -97,6 +108,10 @@ int main()
   unsigned int shader = createShader(source.vertexShader, source.fragmentShader);
   glUseProgram(shader);
 
+  int colorLoc = glGetUniformLocation(shader, "u_color");
+  if (colorLoc != -1)
+    glUniform3f(colorLoc, skyColor[0], skyColor[1], skyColor[2]);
+
   while (!glfwWindowShouldClose(window))
     {
       processInput(window);
@@ -105,7 +120,15 @@ int main()
       glClear(GL_COLOR_BUFFER_BIT);
       glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-      renderImGui();
+      int speedLoc = glGetUniformLocation(shader, "u_waveSpeed");
+      if (speedLoc != -1)
+	glUniform1f(speedLoc, waveSpeed);
+
+      int heightLoc = glGetUniformLocation(shader, "u_waveHeight");
+      if (speedLoc != -1)
+	glUniform1f(heightLoc, waveHeight);
+	
+      renderImGui(shader);
       
       glfwSwapBuffers(window);
       glfwPollEvents();

@@ -16,10 +16,13 @@ void main()
 #version 430
 
 out vec4 fragColor;
+uniform vec3 u_color;
+uniform float u_waveSpeed;
+uniform float u_waveHeight;
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
-  fragColor = vec4(0.7, 0.7, 0.7,1.0);
+  fragColor = vec4(u_color,1.0);
 }
 
 void main()
