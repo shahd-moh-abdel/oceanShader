@@ -33,6 +33,7 @@ float wave(vec2 p, float time)
   float h = 0.0;
   h += u_waveHeight * 0.5 * sin(p.x * 1.0 + time * u_waveSpeed);
   h += u_waveHeight * 0.3 * sin(p.x * 2.0 + p.y * 0.5 + time * u_waveSpeed * 1.3);
+  h += u_waveHeight * 0.2 * sin(p.x * 0.8 + p.y * 1.2 + time * u_waveSpeed * 0.7);
   return h;
 }
 
@@ -40,15 +41,27 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
   vec2 uv = (fragCoord.xy - 0.5 * u_resolution.xy) / u_resolution.y;
 
-  float waveVal = wave(uv * 5.0, u_time);
-    
-  vec3 waveColor = u_color + waveVal * 0.2;
+  vec3 rayOrigin = vec3(0.0, 3.0, -2.0);
+  vec3 rayDir = normalize(vec3(uv.x, uv.y - 0.2, 1.0));
+
+  vec3 color = u_color;
+
+  if (rayDir.y < 0.0)
+    {
+      float t = -rayOrigin.y / rayDir.y;
+      vec3 hitPoint = rayOrigin + t * rayDir;
+      hitPoint.y = wave(hitPoint.xz, u_time);
+
+      color = vec3(0.1, 0.3, 0.6);
+    }
   
-  fragColor = vec4(waveColor,1.0);
+  // float waveVal = wave(uv * 5.0, u_time);
+  //vec3 waveColor = u_color + waveVal * 0.2;
+  
+  fragColor = vec4(color,1.0);
 }
 
 void main()
 {
   mainImage(fragColor, gl_FragCoord.xy);
 }
-
