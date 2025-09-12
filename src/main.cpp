@@ -63,6 +63,15 @@ int main()
   if (colorLoc != -1)
     glUniform3f(colorLoc, skyColor[0], skyColor[1], skyColor[2]);
 
+  int speedLoc = glGetUniformLocation(shader, "u_waveSpeed");
+  if (speedLoc != -1)
+    glUniform1f(speedLoc, waveSpeed);
+
+  int heightLoc = glGetUniformLocation(shader, "u_waveHeight");
+  if (speedLoc != -1)
+    glUniform1f(heightLoc, waveHeight);
+
+  
   while (!glfwWindowShouldClose(window))
     {
       processInput(window);
@@ -70,14 +79,6 @@ int main()
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
       glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-      int speedLoc = glGetUniformLocation(shader, "u_waveSpeed");
-      if (speedLoc != -1)
-	glUniform1f(speedLoc, waveSpeed);
-
-      int heightLoc = glGetUniformLocation(shader, "u_waveHeight");
-      if (speedLoc != -1)
-	glUniform1f(heightLoc, waveHeight);
 	
       renderImGui(shader,skyColor, waveSpeed, waveHeight);
       

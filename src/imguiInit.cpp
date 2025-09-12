@@ -19,7 +19,7 @@ void initImGui(GLFWwindow* window)
   ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void renderImGui(unsigned int shader, float skyColor[], float waveSpeed, float waveHeight)
+void renderImGui(unsigned int shader, float skyColor[], float& waveSpeed, float& waveHeight)
 {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -35,10 +35,21 @@ void renderImGui(unsigned int shader, float skyColor[], float waveSpeed, float w
     }
   
   ImGui::Text("Wave Speed: %.2f", waveSpeed);
-  ImGui::SliderFloat("Speed", &waveSpeed, 0.0f, 5.0f);
+  if (ImGui::SliderFloat("Speed", &waveSpeed, 0.0f, 5.0f))
+    {
+      int speedLoc = glGetUniformLocation(shader, "u_waveSpeed");
+      if (speedLoc != -1)
+	glUniform1f(speedLoc, waveSpeed);
+
+    }
   
   ImGui::Text("Wave Height: %.2f", waveHeight);
-  ImGui::SliderFloat("Height", &waveHeight, 0.0f, 2.0f);
+  if (ImGui::SliderFloat("Height", &waveHeight, 0.0f, 2.0f))
+    {
+      int heightLoc = glGetUniformLocation(shader, "u_waveHeight");
+      if (heightLoc != -1)
+	glUniform1f(heightLoc, waveHeight);
+    }
   ImGui::End();
 
   ImGui::Render();
