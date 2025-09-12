@@ -19,13 +19,30 @@ out vec4 fragColor;
 uniform vec3 u_color;
 uniform float u_waveSpeed;
 uniform float u_waveHeight;
+//const sunHeight;
+
+uniform vec2 u_resolution;
+uniform float u_time;
+
+//const vec3 skyColor1 = vec3(0.3, 0.6, 0.9);
+//const vec3 skyColor2 = vec3(0.529, 0.808, 0.922);
+//const vec3 sunColor = vec3(1.0, 0.9, 0.7);
+
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
-  fragColor = vec4(u_color,1.0);
+  vec2 uv = fragCoord.xy / u_resolution.xy;
+
+  float wave = sin(uv.x * 10.0 + u_time * u_waveSpeed) * u_waveHeight;
+  wave += sin(uv.y * 8.0 + u_time * u_waveSpeed * 0.7) * u_waveHeight * 0.5;
+  
+  vec3 waveColor = u_color + vec3(wave * 0.2);
+  
+  fragColor = vec4(waveColor,1.0);
 }
 
 void main()
 {
-   mainImage(fragColor, gl_FragCoord.xy);
+  mainImage(fragColor, gl_FragCoord.xy);
 }
+

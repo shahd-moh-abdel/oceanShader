@@ -71,6 +71,13 @@ int main()
   if (speedLoc != -1)
     glUniform1f(heightLoc, waveHeight);
 
+  int resLoc = glGetUniformLocation(shader, "u_resolution");
+  if (resLoc != -1)
+    glUniform2f(resLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
+  
+  int timeLoc = glGetUniformLocation(shader, "u_time");
+
+  double startTime = glfwGetTime();
   
   while (!glfwWindowShouldClose(window))
     {
@@ -78,8 +85,13 @@ int main()
 
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
+
+      float currentTime = glfwGetTime() - startTime;
+      if (timeLoc != -1)
+	glUniform1f(timeLoc, currentTime); 
+      
       glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	
+     
       renderImGui(shader,skyColor, waveSpeed, waveHeight);
       
       glfwSwapBuffers(window);
