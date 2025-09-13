@@ -16,17 +16,21 @@ void main()
 #version 430
 
 out vec4 fragColor;
-uniform vec3 u_color;
-uniform float u_waveSpeed;
-uniform float u_waveHeight;
-//const sunHeight;
 
 uniform vec2 u_resolution;
 uniform float u_time;
 
-const vec3 skyColor1 = vec3(0.3, 0.6, 0.9);
-const vec3 skyColor2 = vec3(0.529, 0.808, 0.922);
-//const vec3 sunColor = vec3(1.0, 0.9, 0.7);
+uniform vec3 u_color;
+uniform float u_waveSpeed;
+uniform float u_waveHeight;
+
+float u_sunHeight = 0.8f;
+float u_fresnelPower = 2.0f;
+float u_reflectionStrength = 0.8f;
+vec3 u_skyColor1 = {0.5f, 0.7f, 1.0f};
+vec3 u_skyColor2 = {0.7f, 0.9f, 1.0f};
+vec3 u_waterColor = {0.1f, 0.3f, 0.6f};
+vec3 u_sunColor = vec3(1.0, 0.9, 0.7);
 
 float wave(vec2 p, float time)
 {
@@ -53,12 +57,12 @@ vec3 getNormal(vec2 p, float time)
 
 vec3 getSkyColor(vec3 rayDir)
 {
-  vec3 sunDir = normalize(vec3(0.0, 0.8, 1.0));
+  vec3 sunDir = normalize(vec3(0.0, u_sunHeight, 1.0));
   float sunDot = max(dot(rayDir, sunDir), 0.0);
 
-  vec3 sky = mix(skyColor1, skyColor2, max(0.0, rayDir.y));
-  sky += vec3(1.0, 0.9, 0.7) * pow(sunDot, 100.0);
-  sky += vec3(1.0, 0.9, 0.7) * 0.3 * pow(sunDot, 30.0);
+  vec3 sky = mix(u_skyColor1, u_skyColor2, max(0.0, rayDir.y));
+  sky += u_sunColor * pow(sunDot, 100.0);
+  sky += u_sunColor * 0.3 * pow(sunDot, 30.0);
 
   return sky;
 }
@@ -85,17 +89,14 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
       vec3 reflectDir = reflect(rayDir, normal);
       vec3 reflection = getSkyColor(reflectDir);
 
-      float fresnel = pow(1.0 - max(0.0, dot(-rayDir, normal)), 2.0);
-      color = mix(vec3(0.1, 0.3, 0.6) + diffuse * 0.3, reflection, fresnel * 0.8);
+      float fresnel = pow(1.0 - max(0.0, dot(-rayDir, normal)), u_fresnelPower);
+      color = mix(u_color + diffuse * 0.3, reflection, fresnel * u_reflectionStrength); 
     }
   else
     {
       color = getSkyColor(rayDir);
     }
-  
-  // float waveVal = wave(uv * 5.0, u_time);
-  //vec3 waveColor = u_color + waveVal * 0.2;
-  
+    
   fragColor = vec4(color,1.0);
 }
 
@@ -103,3 +104,4 @@ void main()
 {
   mainImage(fragColor, gl_FragCoord.xy);
 }
+
