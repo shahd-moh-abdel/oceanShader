@@ -80,9 +80,9 @@ int main()
   if (sunHeightLoc != -1)
     glUniform1f(sunHeightLoc, sunHeight);
   
-  int colorLoc = glGetUniformLocation(shader, "u_color");
-  if (colorLoc != -1)
-    glUniform3f(colorLoc, waterColor[0], waterColor[1], waterColor[2]);
+  int waterColorLoc = glGetUniformLocation(shader, "u_waterColor");
+  if (waterColorLoc != -1)
+    glUniform3f(waterColorLoc, waterColor[0], waterColor[1], waterColor[2]);
 
   int speedLoc = glGetUniformLocation(shader, "u_waveSpeed");
   if (speedLoc != -1)
@@ -113,7 +113,7 @@ int main()
       
       glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
      
-      renderImGui(shader, waterColor, waveSpeed, waveHeight, sunHeight);
+      renderImGui(shader, waterColor, skyColor1, skyColor2, waveSpeed, waveHeight, sunHeight);
       
       glfwSwapBuffers(window);
       glfwPollEvents();

@@ -19,7 +19,7 @@ void initImGui(GLFWwindow* window)
   ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void renderImGui(unsigned int shader, float skyColor[], float& waveSpeed, float& waveHeight, float& sunHeight)
+void renderImGui(unsigned int shader, float waterColor[],float skyColor1[], float skyColor2[], float& waveSpeed, float& waveHeight, float& sunHeight)
 {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -27,11 +27,25 @@ void renderImGui(unsigned int shader, float skyColor[], float& waveSpeed, float&
 
   ImGui::Begin("Controls");
 
-  if (ImGui::ColorEdit3("Sky color", skyColor))
+  if (ImGui::ColorEdit3("water Color", waterColor))
     {
-      int colorLoc = glGetUniformLocation(shader, "u_color");
-      if (colorLoc != -1)
-	glUniform3f(colorLoc, skyColor[0], skyColor[1], skyColor[2]);
+      int waterColorLoc = glGetUniformLocation(shader, "u_waterColor");
+      if (waterColorLoc != -1)
+	glUniform3f(waterColorLoc, waterColor[0], waterColor[1], waterColor[2]);
+    }
+  
+  if (ImGui::ColorEdit3("Sky Color 1", skyColor1))
+    {
+      int skyColor1Loc = glGetUniformLocation(shader, "u_skyColor1");
+      if (skyColor1Loc != -1)
+	glUniform3f(skyColor1Loc, skyColor1[0], skyColor1[1], skyColor1[2]);
+    }
+  
+  if (ImGui::ColorEdit3("Sky Color 2", skyColor2))
+    {
+      int skyColor2Loc = glGetUniformLocation(shader, "u_skyColor2");
+      if (skyColor2Loc != -1)
+	glUniform3f(skyColor2Loc, skyColor2[0], skyColor2[1], skyColor2[2]);
     }
 
   ImGui::Text("Sun Height: %.2f", sunHeight);
@@ -42,7 +56,6 @@ void renderImGui(unsigned int shader, float skyColor[], float& waveSpeed, float&
 	glUniform1f(sunHeightLoc, sunHeight);
 
     }
-  
   
   ImGui::Text("Wave Speed: %.2f", waveSpeed);
   if (ImGui::SliderFloat("Speed", &waveSpeed, 0.0f, 5.0f))

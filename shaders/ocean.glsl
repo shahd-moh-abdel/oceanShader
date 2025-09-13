@@ -20,16 +20,16 @@ out vec4 fragColor;
 uniform vec2 u_resolution;
 uniform float u_time;
 
-uniform vec3 u_color;
+uniform vec3 u_waterColor;
 uniform float u_waveSpeed;
 uniform float u_waveHeight;
 uniform float u_sunHeight;
 //float u_sunHeight = 0.8f;
 float u_fresnelPower = 2.0f;
 float u_reflectionStrength = 0.8f;
-vec3 u_skyColor1 = {0.5f, 0.7f, 1.0f};
-vec3 u_skyColor2 = {0.7f, 0.9f, 1.0f};
-vec3 u_waterColor = {0.1f, 0.3f, 0.6f};
+uniform vec3 u_skyColor1;
+uniform vec3 u_skyColor2;
+
 vec3 u_sunColor = vec3(1.0, 0.9, 0.7);
 
 float wave(vec2 p, float time)
