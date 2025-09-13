@@ -15,7 +15,14 @@ using namespace std;
 
 float waveSpeed = 1.0f;
 float waveHeight = 0.5f;
-float skyColor[3] = {0.7, 0.7, 0.7};
+
+float sunHeight = 0.8f;
+float fresnelPower = 2.0f;
+float reflectionStrength = 0.8f;
+float skyColor1[3] = {0.5f, 0.7f, 1.0f};
+float skyColor2[3] = {0.7f, 0.9f, 1.0f};
+float waterColor[3] = {0.1f, 0.3f, 0.6f};
+
 void processInput(GLFWwindow* window)
 {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -69,9 +76,13 @@ int main()
   unsigned int shader = createShader(source.vertexShader, source.fragmentShader);
   glUseProgram(shader);
 
+  int sunHeightLoc = glGetUniformLocation(shader, "u_sunHeight");
+  if (sunHeightLoc != -1)
+    glUniform1f(sunHeightLoc, sunHeight);
+  
   int colorLoc = glGetUniformLocation(shader, "u_color");
   if (colorLoc != -1)
-    glUniform3f(colorLoc, skyColor[0], skyColor[1], skyColor[2]);
+    glUniform3f(colorLoc, waterColor[0], waterColor[1], waterColor[2]);
 
   int speedLoc = glGetUniformLocation(shader, "u_waveSpeed");
   if (speedLoc != -1)
@@ -102,7 +113,7 @@ int main()
       
       glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
      
-      renderImGui(shader,skyColor, waveSpeed, waveHeight);
+      renderImGui(shader, waterColor, waveSpeed, waveHeight, sunHeight);
       
       glfwSwapBuffers(window);
       glfwPollEvents();

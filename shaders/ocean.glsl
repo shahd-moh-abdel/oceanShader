@@ -23,8 +23,8 @@ uniform float u_time;
 uniform vec3 u_color;
 uniform float u_waveSpeed;
 uniform float u_waveHeight;
-
-float u_sunHeight = 0.8f;
+uniform float u_sunHeight;
+//float u_sunHeight = 0.8f;
 float u_fresnelPower = 2.0f;
 float u_reflectionStrength = 0.8f;
 vec3 u_skyColor1 = {0.5f, 0.7f, 1.0f};
@@ -55,7 +55,7 @@ vec3 getNormal(vec2 p, float time)
   return normalize(cross(dx, dy));
 }
 
-vec3 getSkyColor(vec3 rayDir)
+vec3 getSkyColor(vec3 rayDir, vec2 uv)
 {
   vec3 sunDir = normalize(vec3(0.0, u_sunHeight, 1.0));
   float sunDot = max(dot(rayDir, sunDir), 0.0);
@@ -87,14 +87,14 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
       float diffuse = max(0.0, dot(normal, sunDir));
 
       vec3 reflectDir = reflect(rayDir, normal);
-      vec3 reflection = getSkyColor(reflectDir);
+      vec3 reflection = getSkyColor(reflectDir, uv);
 
       float fresnel = pow(1.0 - max(0.0, dot(-rayDir, normal)), u_fresnelPower);
-      color = mix(u_color + diffuse * 0.3, reflection, fresnel * u_reflectionStrength); 
+      color = mix(u_skyColor1 +  diffuse * 0.3, reflection, fresnel * u_reflectionStrength); 
     }
   else
     {
-      color = getSkyColor(rayDir);
+      color = getSkyColor(rayDir, uv);
     }
     
   fragColor = vec4(color,1.0);
