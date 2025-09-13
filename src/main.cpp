@@ -22,6 +22,11 @@ void processInput(GLFWwindow* window)
     glfwSetWindowShouldClose(window, true);
 }
 
+void framebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}   
+
 GLFWwindow* initWindow()
 {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -45,6 +50,11 @@ GLFWwindow* initWindow()
       cout << "Error: glad" << endl;
       return nullptr;
     }
+
+  glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+  glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);  
+
   return window;
 }
 
