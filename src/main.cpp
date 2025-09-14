@@ -66,6 +66,8 @@ GLFWwindow* initWindow()
   return window;
 }
 
+void initParas();//I'll take the uniforms init here later
+
 int main()
 {
   GLFWwindow* window = initWindow();
@@ -105,6 +107,10 @@ int main()
   if (speedLoc != -1)
     glUniform1f(heightLoc, waveHeight);
 
+  int fresnelPowerLoc = glGetUniformLocation(shader, "u_fresnelPower");
+  if (fresnelPowerLoc != -1)
+    glUniform1f(fresnelPowerLoc, fresnelPower);
+  
   int resLoc = glGetUniformLocation(shader, "u_resolution");
   if (resLoc != -1)
     glUniform2f(resLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -126,7 +132,7 @@ int main()
       
       glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
      
-      renderImGui(shader, waterColor, sunColor, skyColor1, skyColor2, waveSpeed, waveHeight, sunHeight);
+      renderImGui(shader, waterColor, sunColor, skyColor1, skyColor2, waveSpeed, waveHeight, sunHeight,fresnelPower);
       
       glfwSwapBuffers(window);
       glfwPollEvents();

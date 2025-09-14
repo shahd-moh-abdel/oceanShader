@@ -19,7 +19,7 @@ void initImGui(GLFWwindow* window)
   ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void renderImGui(unsigned int shader, float waterColor[], float sunColor[], float skyColor1[], float skyColor2[], float& waveSpeed, float& waveHeight, float& sunHeight)
+void renderImGui(unsigned int shader, float waterColor[], float sunColor[], float skyColor1[], float skyColor2[], float& waveSpeed, float& waveHeight, float& sunHeight, float& fresnelPower)
 {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -79,6 +79,14 @@ void renderImGui(unsigned int shader, float waterColor[], float sunColor[], floa
       int heightLoc = glGetUniformLocation(shader, "u_waveHeight");
       if (heightLoc != -1)
 	glUniform1f(heightLoc, waveHeight);
+    }
+
+  ImGui::Text("Fresnel Power: %.2f", fresnelPower);
+  if (ImGui::SliderFloat("FresnelPower", &fresnelPower, 0.0f, 3.0f))
+    {
+      int fresnelPowerLoc = glGetUniformLocation(shader, "u_fresnelPower");
+      if (fresnelPowerLoc != -1)
+	glUniform1f(fresnelPower, fresnelPower);
     }
   ImGui::End();
 
