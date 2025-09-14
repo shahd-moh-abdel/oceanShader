@@ -18,7 +18,7 @@ float waveHeight = 0.5f;
 
 float sunHeight = 0.08f;
 float fresnelPower = 2.0f;
-float reflectionStrength = 0.8f;
+float reflectionStrength = 0.5f;
 float skyColor1[3] = {0.5f, 0.7f, 1.0f};
 float skyColor2[3] = {0.7f, 0.9f, 1.0f};
 float waterColor[3] = {0.1f, 0.3f, 0.6f};
@@ -110,6 +110,10 @@ int main()
   int fresnelPowerLoc = glGetUniformLocation(shader, "u_fresnelPower");
   if (fresnelPowerLoc != -1)
     glUniform1f(fresnelPowerLoc, fresnelPower);
+
+  int reflectionStrengthLoc = glGetUniformLocation(shader, "u_reflectionStrength");
+  if (reflectionStrengthLoc != -1)
+    glUniform1f(reflectionStrengthLoc, reflectionStrength);
   
   int resLoc = glGetUniformLocation(shader, "u_resolution");
   if (resLoc != -1)
@@ -132,7 +136,17 @@ int main()
       
       glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
      
-      renderImGui(shader, waterColor, sunColor, skyColor1, skyColor2, waveSpeed, waveHeight, sunHeight,fresnelPower);
+      renderImGui(
+		  shader,
+		  waterColor,
+		  sunColor,
+		  skyColor1,
+		  skyColor2,
+		  waveSpeed,
+		  waveHeight,
+		  sunHeight,
+		  fresnelPower,
+		  reflectionStrength);
       
       glfwSwapBuffers(window);
       glfwPollEvents();

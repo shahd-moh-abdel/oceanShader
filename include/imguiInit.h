@@ -4,7 +4,16 @@
 #include <GLFW/glfw3.h>
 
 void initImGui(GLFWwindow* window); 
-void renderImGui(unsigned int shader, float waterColor[],float sunColor[], float skyColor1[], float skyColor2[], float& waveSpeed, float& waveHeight, float& sunHeight,  float& fresnelPower);
+void renderImGui(unsigned int shader,
+		 float waterColor[],
+		 float sunColor[],
+		 float skyColor1[],
+		 float skyColor2[],
+		 float& waveSpeed,
+		 float& waveHeight,
+		 float& sunHeight,
+		 float& fresnelPower,
+		 float& reflectionStrength);
 void cleanup();
 
 #endif

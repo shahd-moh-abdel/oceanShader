@@ -24,9 +24,8 @@ uniform vec3 u_waterColor;
 uniform float u_waveSpeed;
 uniform float u_waveHeight;
 uniform float u_sunHeight;
-//float u_sunHeight = 0.8f;
 uniform float u_fresnelPower;
-uniform float u_reflectionStrength = 0.8f;
+uniform float u_reflectionStrength;
 uniform vec3 u_skyColor1;
 uniform vec3 u_skyColor2;
 

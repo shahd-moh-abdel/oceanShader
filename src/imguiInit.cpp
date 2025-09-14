@@ -19,7 +19,7 @@ void initImGui(GLFWwindow* window)
   ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void renderImGui(unsigned int shader, float waterColor[], float sunColor[], float skyColor1[], float skyColor2[], float& waveSpeed, float& waveHeight, float& sunHeight, float& fresnelPower)
+void renderImGui(unsigned int shader, float waterColor[], float sunColor[], float skyColor1[], float skyColor2[], float& waveSpeed, float& waveHeight, float& sunHeight, float& fresnelPower, float& reflectionStrength)
 {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -87,6 +87,14 @@ void renderImGui(unsigned int shader, float waterColor[], float sunColor[], floa
       int fresnelPowerLoc = glGetUniformLocation(shader, "u_fresnelPower");
       if (fresnelPowerLoc != -1)
 	glUniform1f(fresnelPower, fresnelPower);
+    }
+
+  ImGui::Text("Reflection Strength: %.2f", reflectionStrength);
+  if (ImGui::SliderFloat("Reflection", &reflectionStrength, 0.0f, 3.0f))
+    {
+      int reflectionStrengthLoc = glGetUniformLocation(shader, "u_reflectionStrength");
+      if (reflectionStrengthLoc != -1)
+	glUniform1f(reflectionStrengthLoc, reflectionStrength);
     }
   ImGui::End();
 
