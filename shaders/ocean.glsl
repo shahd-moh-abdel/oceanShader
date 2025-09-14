@@ -30,7 +30,7 @@ float u_reflectionStrength = 0.8f;
 uniform vec3 u_skyColor1;
 uniform vec3 u_skyColor2;
 
-vec3 u_sunColor = vec3(1.0, 0.9, 0.7);
+uniform vec3 u_sunColor;
 
 float wave(vec2 p, float time)
 {
@@ -90,7 +90,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
       vec3 reflection = getSkyColor(reflectDir, uv);
 
       float fresnel = pow(1.0 - max(0.0, dot(-rayDir, normal)), u_fresnelPower);
-      color = mix(u_skyColor1 +  diffuse * 0.3, reflection, fresnel * u_reflectionStrength); 
+      color = mix(u_waterColor +  diffuse * 0.3, reflection, fresnel * u_reflectionStrength); 
     }
   else
     {

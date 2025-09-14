@@ -19,7 +19,7 @@ void initImGui(GLFWwindow* window)
   ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void renderImGui(unsigned int shader, float waterColor[],float skyColor1[], float skyColor2[], float& waveSpeed, float& waveHeight, float& sunHeight)
+void renderImGui(unsigned int shader, float waterColor[], float sunColor[], float skyColor1[], float skyColor2[], float& waveSpeed, float& waveHeight, float& sunHeight)
 {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -32,6 +32,13 @@ void renderImGui(unsigned int shader, float waterColor[],float skyColor1[], floa
       int waterColorLoc = glGetUniformLocation(shader, "u_waterColor");
       if (waterColorLoc != -1)
 	glUniform3f(waterColorLoc, waterColor[0], waterColor[1], waterColor[2]);
+    }
+
+  if (ImGui::ColorEdit3("Sun Color", sunColor))
+    {
+      int sunColorLoc = glGetUniformLocation(shader, "u_sunColor");
+      if (sunColorLoc != -1)
+	glUniform3f(sunColorLoc, sunColor[0], sunColor[1], sunColor[2]);
     }
   
   if (ImGui::ColorEdit3("Sky Color 1", skyColor1))
