@@ -13,6 +13,10 @@ using namespace std;
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+int g_windowWidth = SCREEN_WIDTH;
+int g_windowHeight = SCREEN_HEIGHT;
+int g_shader = 0;
+
 float waveSpeed = 1.0f;
 float waveHeight = 0.5f;
 
@@ -32,7 +36,18 @@ void processInput(GLFWwindow* window)
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
-    glViewport(0, 0, width, height);
+  glViewport(0, 0, width, height);  
+
+  g_windowWidth = width;
+  g_windowHeight = height;
+
+  if (g_shader != 0)
+    {					
+      int resLoc = glGetUniformLocation(g_shader, "u_resolution");
+      if (resLoc != -1)
+	glUniform2f(resLoc, (float)width, (float)height);
+    }
+  
 }   
 
 GLFWwindow* initWindow()
@@ -79,6 +94,8 @@ int main()
   unsigned int shader = createShader(source.vertexShader, source.fragmentShader);
   glUseProgram(shader);
 
+  g_shader = shader;
+
   int sunHeightLoc = glGetUniformLocation(shader, "u_sunHeight");
   if (sunHeightLoc != -1)
     glUniform1f(sunHeightLoc, sunHeight);
@@ -93,7 +110,7 @@ int main()
 
   int skyColor2Loc = glGetUniformLocation(shader, "u_skyColor2");
   if (skyColor2Loc != -1)
-  glUniform3f(skyColor2Loc, skyColor2[0], skyColor2[2], skyColor2[2]);
+  glUniform3f(skyColor2Loc, skyColor2[0], skyColor2[1], skyColor2[2]);
 
   int sunColorLoc = glGetUniformLocation(shader, "u_sunColor");
   if (sunColorLoc != -1)
@@ -104,7 +121,7 @@ int main()
     glUniform1f(speedLoc, waveSpeed);
 
   int heightLoc = glGetUniformLocation(shader, "u_waveHeight");
-  if (speedLoc != -1)
+  if (heightLoc != -1)
     glUniform1f(heightLoc, waveHeight);
 
   int fresnelPowerLoc = glGetUniformLocation(shader, "u_fresnelPower");
@@ -152,7 +169,11 @@ int main()
       glfwPollEvents();
     }
 
+  if (shader != 0) {
+    glDeleteProgram(shader);
+  }
   cleanup();
+  cleanupFullScreen();
   glfwTerminate();
   return 0;
 }

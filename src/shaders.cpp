@@ -6,6 +6,9 @@
 
 using namespace std;
 
+GLuint g_VAO = 0;
+GLuint g_VBO = 0;
+
 shaderProgram parseShader(const string& filePath)
 {
   ifstream stream(filePath);
@@ -92,4 +95,16 @@ void createFullScreen()
 
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+}
+
+void cleanupFullScreen()
+{
+    if (g_VBO != 0) {
+        glDeleteBuffers(1, &g_VBO);
+        g_VBO = 0;
+    }
+    if (g_VAO != 0) {
+        glDeleteVertexArrays(1, &g_VAO);
+        g_VAO = 0;
+    }
 }
