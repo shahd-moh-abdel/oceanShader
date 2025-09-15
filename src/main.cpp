@@ -17,8 +17,8 @@ int g_windowWidth = SCREEN_WIDTH;
 int g_windowHeight = SCREEN_HEIGHT;
 int g_shader = 0;
 
-float waveSpeed = 1.0f;
-float waveHeight = 0.5f;
+float waveSpeed = 1.5f;
+float waveHeight = 0.25f;
 
 float sunHeight = 0.08f;
 float fresnelPower = 2.0f;
@@ -27,12 +27,6 @@ float skyColor1[3] = {0.5f, 0.7f, 1.0f};
 float skyColor2[3] = {0.7f, 0.9f, 1.0f};
 float waterColor[3] = {0.1f, 0.3f, 0.6f};
 float sunColor[3] = {1.0f, 0.9f, 0.0f};
-
-void processInput(GLFWwindow* window)
-{
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
-}
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
@@ -81,6 +75,32 @@ GLFWwindow* initWindow()
   return window;
 }
 
+void resetParas()
+{
+
+  waveSpeed = 1.5f;
+  waveHeight = 0.25f;
+
+  sunHeight = 0.08f;
+  fresnelPower = 2.0f;
+  reflectionStrength = 0.5f;
+  skyColor1[0] = 0.5f;
+  skyColor1[1] = 0.7f;
+  skyColor1[2] = 1.0f;
+  
+  skyColor2[0] = 0.7f;
+  skyColor2[1] = 0.9f;
+  skyColor2[2] = 1.0f;
+
+  waterColor[0] = 0.1f;
+  waterColor[1] = 0.3f;
+  waterColor[2] = 0.6f;
+
+  sunColor[0] = 1.0f;
+  sunColor[1] = 0.9f;
+  sunColor[2] = 0.0f;
+}
+
 void initParas(unsigned int shader)
 {
   int sunHeightLoc = glGetUniformLocation(shader, "u_sunHeight");
@@ -121,9 +141,21 @@ void initParas(unsigned int shader)
   
   int resLoc = glGetUniformLocation(shader, "u_resolution");
   if (resLoc != -1)
-    glUniform2f(resLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
+    glUniform2f(resLoc, g_windowWidth, g_windowHeight);
 }
 
+
+void processInput(GLFWwindow* window)
+{
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    glfwSetWindowShouldClose(window, true);
+
+  if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+    {
+      resetParas();
+      initParas(g_shader);
+    }
+}
 
 int main()
 {

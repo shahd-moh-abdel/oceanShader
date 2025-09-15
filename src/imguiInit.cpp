@@ -27,6 +27,8 @@ void renderImGui(unsigned int shader, float waterColor[], float sunColor[], floa
 
   ImGui::Begin("Controls");
 
+  ImGui::Text("Press R to reset");
+  
   if (ImGui::ColorEdit3("water Color", waterColor))
     {
       int waterColorLoc = glGetUniformLocation(shader, "u_waterColor");
@@ -96,6 +98,7 @@ void renderImGui(unsigned int shader, float waterColor[], float sunColor[], floa
       if (reflectionStrengthLoc != -1)
 	glUniform1f(reflectionStrengthLoc, reflectionStrength);
     }
+
   ImGui::End();
 
   ImGui::Render();
