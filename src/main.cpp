@@ -101,6 +101,32 @@ void resetParas()
   sunColor[2] = 0.0f;
 }
 
+void sunsetParas()
+{
+
+  waveSpeed = 1.5f;
+  waveHeight = 0.25f;
+
+  sunHeight = 0.00f;
+  fresnelPower = 2.0f;
+  reflectionStrength = 1.0f;
+  skyColor1[0] = 0.855f;
+  skyColor1[1] = 0.773f;
+  skyColor1[2] = 0.702f;
+  
+  skyColor2[0] = 1.0f;
+  skyColor2[1] = 0.443f;
+  skyColor2[2] = 0.0f;
+
+  waterColor[0] = 0.98f;
+  waterColor[1] = 0.698f;
+  waterColor[2] = 0.498f;
+
+  sunColor[0] = 0.835f;
+  sunColor[1] = 0.271f;
+  sunColor[2] = 0.0f;
+}
+
 void initParas(unsigned int shader)
 {
   int sunHeightLoc = glGetUniformLocation(shader, "u_sunHeight");
@@ -153,6 +179,12 @@ void processInput(GLFWwindow* window)
   if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
     {
       resetParas();
+      initParas(g_shader);
+    }
+
+  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+      sunsetParas();
       initParas(g_shader);
     }
 }

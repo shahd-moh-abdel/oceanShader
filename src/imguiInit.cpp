@@ -27,7 +27,9 @@ void renderImGui(unsigned int shader, float waterColor[], float sunColor[], floa
 
   ImGui::Begin("Controls");
 
-  ImGui::Text("Press R to reset");
+  ImGui::Text("Keys:");
+  ImGui::Text("R: reset");
+  ImGui::Text("S: Sunset");
   
   if (ImGui::ColorEdit3("water Color", waterColor))
     {
