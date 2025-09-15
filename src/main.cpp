@@ -81,21 +81,8 @@ GLFWwindow* initWindow()
   return window;
 }
 
-void initParas();//I'll take the uniforms init here later
-
-int main()
+void initParas(unsigned int shader)
 {
-  GLFWwindow* window = initWindow();
-  initImGui(window);
-
-  createFullScreen();
-  
-  shaderProgram source = parseShader("./shaders/ocean.glsl");
-  unsigned int shader = createShader(source.vertexShader, source.fragmentShader);
-  glUseProgram(shader);
-
-  g_shader = shader;
-
   int sunHeightLoc = glGetUniformLocation(shader, "u_sunHeight");
   if (sunHeightLoc != -1)
     glUniform1f(sunHeightLoc, sunHeight);
@@ -135,18 +122,34 @@ int main()
   int resLoc = glGetUniformLocation(shader, "u_resolution");
   if (resLoc != -1)
     glUniform2f(resLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
-  
-  int timeLoc = glGetUniformLocation(shader, "u_time");
+}
 
-  double startTime = glfwGetTime();
+
+int main()
+{
+  GLFWwindow* window = initWindow();
+  initImGui(window);
+
+  createFullScreen();
   
+  shaderProgram source = parseShader("./shaders/ocean.glsl");
+  unsigned int shader = createShader(source.vertexShader, source.fragmentShader);
+  glUseProgram(shader);
+
+  g_shader = shader;
+
+  initParas(shader);
+  
+  double startTime = glfwGetTime();
+
   while (!glfwWindowShouldClose(window))
     {
       processInput(window);
 
       glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
-
+    
+      int timeLoc = glGetUniformLocation(shader, "u_time");
       float currentTime = glfwGetTime() - startTime;
       if (timeLoc != -1)
 	glUniform1f(timeLoc, currentTime); 
